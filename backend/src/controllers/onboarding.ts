@@ -3,7 +3,7 @@ import { users } from "../mockDb/database";
 import { getPrompt } from "../utils/mockAi";
 import { Language } from "../types/user";
 
-const router = express.Router();
+// const router = express.Router();
 
 // Welcome message in selected language
 export const getWelcomeMessage = (req: express.Request, res: express.Response): void => {
