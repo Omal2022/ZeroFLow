@@ -4,11 +4,17 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 
+import onboardingRoute from "./routes/onboardingRoute"
 
+<<<<<<< HEAD
 import onboardingRoutes from "../routes/onboardingRoute";
+=======
+// import onboardingRoutes from "./routes/onboarding";
+>>>>>>> parent of 73454c2 (be)
 
 
 console.log("PORT from .env:", process.env.PORT);
+
 
 const app = express();
 app.use(cors({
