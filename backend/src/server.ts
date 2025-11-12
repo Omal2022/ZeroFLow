@@ -5,7 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 
 
-import onboardingRoutes from "./routes/onboarding";
+import onboardingRoutes from "../routes/onboardingRoute";
 
 
 console.log("PORT from .env:", process.env.PORT);
