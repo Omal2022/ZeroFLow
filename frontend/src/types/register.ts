@@ -15,6 +15,13 @@ export interface User {
   language: Language;
 }
 
+// API response for verification
+export interface VerifyResponse {
+  success: boolean;
+  user?: User;
+  message?: string;
+}
+
 export interface IsVerified {
   verified: VerificationStatus;
   account?: {
