@@ -28,18 +28,21 @@ export default function OnboardingForm({ onNext }: Props) {
 
   // Get welcome message when component loads
   useEffect(() => {
-    fetchWelcomeMessage();
-  }, [form.language]);
+    const fetchWelcomeMessage = async () => {
+      console.log("🔵 Fetching welcome message for:", form.language);
+      try {
+        const res = await fetch(`http://localhost:5000/onboarding/welcome/${form.language}`);
+        const data = await res.json();
+        console.log("🔵 Received:", data);
+        setAiMessage(data.message);
+        console.log("data Message:", data.message)
+      } catch (err) {
+        console.error("🔴 Error:", err);
+      }
+    };
 
-  const fetchWelcomeMessage = async () => {
-    try {
-      const res = await fetch(`http://localhost:5000/onboarding/welcome/:lang${form.language}`);
-      const data = await res.json();
-      setAiMessage(data.message);
-    } catch (err) {
-      console.error("Failed to fetch welcome message:", err);
-    }
-  };
+    fetchWelcomeMessage();
+  }, [form.language]); 
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -126,7 +129,7 @@ export default function OnboardingForm({ onNext }: Props) {
           style={{
             padding: "1rem",
             marginBottom: "1.5rem",
-            backgroundColor: "#f0f9ff",
+            backgroundColor: "#00121fff",
             borderLeft: "4px solid #3b82f6",
             borderRadius: "4px",
           }}
