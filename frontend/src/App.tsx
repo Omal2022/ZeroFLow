@@ -1,20 +1,30 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Welcome from "./pages/Welcome.tsx";
+import IdentityInput from "./pages/IdentityInput.tsx";
+import LoadingVerification from "./pages/LoadingVerification.tsx";
+import AutoFillForm from "./pages/AutoFillForm.tsx";
+import FaceVerificationWrapper from "./pages/FaceVerificationWrapper.tsx";
+import AccountSuccess from "./pages/AccountSuccess.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
 import CreateAcc from "./pages/CreateAcc.tsx";
 import Verification from "./pages/Verification.tsx";
-import type { User } from "./types/register.ts";
-import "./app.css";
 
 const App = () => {
-  const handleNext = (user: User) => {
-    // TODO: implement navigation or logic after account creation
-    console.log("User created:", user);
-  };
-
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<CreateAcc onNext={handleNext} />} />
+          {/* New KYC Flow */}
+          <Route path="/" element={<Welcome />} />
+          <Route path="/identity" element={<IdentityInput />} />
+          <Route path="/loading" element={<LoadingVerification />} />
+          <Route path="/form" element={<AutoFillForm />} />
+          <Route path="/face-verification" element={<FaceVerificationWrapper />} />
+          <Route path="/success" element={<AccountSuccess />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Legacy Routes */}
+          <Route path="/old" element={<CreateAcc />} />
           <Route path="/verify" element={<Verification />} />
         </Routes>
       </Router>
