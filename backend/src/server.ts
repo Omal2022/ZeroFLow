@@ -4,13 +4,8 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 
-import onboardingRoute from "./routes/onboardingRoute"
-
-<<<<<<< HEAD
-import onboardingRoutes from "../routes/onboardingRoute";
-=======
-// import onboardingRoutes from "./routes/onboarding";
->>>>>>> parent of 73454c2 (be)
+import onboardingRoute from "./routes/onboardingRoute";
+import kycRoutes from "./routes/kycRoutes";
 
 
 console.log("PORT from .env:", process.env.PORT);
@@ -24,6 +19,7 @@ app.use(cors({
 app.use(bodyParser.json());
 
 app.use("/onboarding", onboardingRoute);
+app.use("/kyc", kycRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
