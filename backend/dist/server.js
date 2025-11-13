@@ -10,6 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const onboardingRoute_1 = __importDefault(require("./routes/onboardingRoute"));
 const kycRoutes_1 = __importDefault(require("./routes/kycRoutes"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 console.log("PORT from .env:", process.env.PORT);
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -19,5 +20,6 @@ app.use((0, cors_1.default)({
 app.use(body_parser_1.default.json());
 app.use("/onboarding", onboardingRoute_1.default);
 app.use("/kyc", kycRoutes_1.default);
+app.use("/auth", authRoutes_1.default);
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

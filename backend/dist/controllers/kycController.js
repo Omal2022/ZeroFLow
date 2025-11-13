@@ -1,17 +1,55 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTrustScore = exports.createAccount = exports.verifyLocation = exports.verifyIdentity = exports.verifyBVN = exports.verifyNIN = void 0;
+exports.upgradeKYCTier = exports.getTrustScore = exports.createAccount = exports.verifyLocation = exports.verifyIdentity = exports.verifyBVN = exports.verifyNIN = exports.KYC_TIERS = void 0;
+exports.checkExistingAccount = checkExistingAccount;
 exports.generateAccountNumber = generateAccountNumber;
+exports.getKYCTierInfo = getKYCTierInfo;
 exports.calculateTrustScore = calculateTrustScore;
 const ninDatabase_1 = require("../mockDb/ninDatabase");
-// Account number generation: 42 + DDMMYY + 2 random digits
-function generateAccountNumber(dob) {
+const accountsStore = new Map();
+// Check if account already exists
+function checkExistingAccount(identityNumber) {
+    return accountsStore.get(identityNumber) || null;
+}
+// Store new account
+function storeAccount(identityNumber, accountData) {
+    accountsStore.set(identityNumber, accountData);
+}
+// Account number generation: 42 + last 4 NIN digits + YYMMDD
+function generateAccountNumber(dob, nin) {
     const date = new Date(dob);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = String(date.getFullYear()).slice(-2);
-    const randomDigits = Math.floor(Math.random() * 90) + 10; // 10-99
-    return `42${day}${month}${year}${randomDigits}`;
+    // Get last 4 digits of NIN
+    const last4NIN = nin.slice(-4);
+    return `42${last4NIN}${year}${month}${day}`;
+}
+exports.KYC_TIERS = [
+    {
+        tier: 1,
+        name: "Basic",
+        requirements: ["Email verification", "NIN verification"],
+        transactionLimit: 50000,
+        description: "₦50,000/day limit"
+    },
+    {
+        tier: 2,
+        name: "Standard",
+        requirements: ["Tier 1 requirements", "Utility bill", "ID card upload"],
+        transactionLimit: 500000,
+        description: "₦500,000/day limit"
+    },
+    {
+        tier: 3,
+        name: "Premium",
+        requirements: ["Tier 2 requirements", "Proof of address", "Bank statement"],
+        transactionLimit: Infinity,
+        description: "Unlimited transactions"
+    }
+];
+function getKYCTierInfo(tier) {
+    return exports.KYC_TIERS.find(t => t.tier === tier) || null;
 }
 function calculateTrustScore(factors) {
     const weights = {
@@ -190,15 +228,39 @@ const createAccount = (req, res) => {
         });
         return;
     }
-    // Verify identity first
+    // Check for existing account with this identity number
+    const existingAccount = checkExistingAccount(identityNumber);
+    if (existingAccount) {
+        res.status(409).json({
+            success: false,
+            message: `An account already exists with this ${identityType}. You cannot create multiple accounts with the same identity.`,
+            existingAccountInfo: {
+                accountNumber: existingAccount.accountNumber,
+                email: existingAccount.email,
+                phone: existingAccount.phone,
+                createdAt: existingAccount.createdAt
+            }
+        });
+        return;
+    }
+    // Verify identity first and retrieve DOB from database
     let verified = false;
+    let databaseDOB = dob; // Default to user-provided DOB as fallback
     if (identityType === "NIN") {
         const ninRecord = (0, ninDatabase_1.findNINRecord)(identityNumber);
         verified = ninRecord !== null && ninRecord.status === "active";
+        // Use DOB from NIN database for account number generation
+        if (ninRecord?.demographics?.dob) {
+            databaseDOB = ninRecord.demographics.dob;
+        }
     }
     else if (identityType === "BVN") {
         const bvnRecord = (0, ninDatabase_1.findBVNRecord)(identityNumber);
         verified = bvnRecord !== null;
+        // Use DOB from BVN database for account number generation
+        if (bvnRecord?.dob) {
+            databaseDOB = bvnRecord.dob;
+        }
     }
     if (!verified) {
         res.status(400).json({
@@ -207,8 +269,8 @@ const createAccount = (req, res) => {
         });
         return;
     }
-    // Generate account number
-    const accountNumber = generateAccountNumber(dob);
+    // Generate account number with new formula: 42 + last 4 NIN + YYMMDD (using database DOB)
+    const accountNumber = generateAccountNumber(databaseDOB, identityNumber);
     // Calculate trust score
     const trustScore = calculateTrustScore({
         ninVerified: identityType === "NIN" && verified,
@@ -220,6 +282,28 @@ const createAccount = (req, res) => {
     });
     // Auto-approve if trust score > 0.7
     const accountStatus = trustScore > 0.7 ? "active" : "pending_review";
+    // Assign KYC tier (Tier 1 by default for new accounts with email + NIN/BVN verification)
+    const kycTier = 1;
+    const tierInfo = getKYCTierInfo(kycTier);
+    // Store account to prevent duplicates
+    const createdAt = new Date().toISOString();
+    storeAccount(identityNumber, {
+        accountNumber,
+        identityType,
+        identityNumber,
+        email,
+        phone,
+        createdAt
+    });
+    console.log(`
+╔════════════════════════════════════════════╗
+║         NEW ACCOUNT CREATED                ║
+║ Account Number: ${accountNumber}           ║
+║ Identity: ${identityType} - ***${identityNumber.slice(-4)}        ║
+║ Email: ${email.padEnd(30)}║
+║ Status: ${accountStatus.padEnd(33)}║
+╚════════════════════════════════════════════╝
+  `);
     res.json({
         success: true,
         message: `Account created successfully! ${accountStatus === "active" ? "Your account is now active." : "Your account is under review."}`,
@@ -227,6 +311,12 @@ const createAccount = (req, res) => {
             accountNumber,
             accountStatus,
             trustScore,
+            kycTier: {
+                current: kycTier,
+                name: tierInfo?.name || "Basic",
+                transactionLimit: tierInfo?.transactionLimit || 50000,
+                description: tierInfo?.description || "₦50,000/day limit"
+            },
             user: {
                 firstName,
                 lastName,
@@ -262,3 +352,86 @@ const getTrustScore = (req, res) => {
     });
 };
 exports.getTrustScore = getTrustScore;
+// KYC Tier Upgrade
+const upgradeKYCTier = (req, res) => {
+    const { currentTier, targetTier, utilityBill, idCard, proofOfAddress, bankStatement } = req.body;
+    if (!currentTier || !targetTier) {
+        res.status(400).json({
+            success: false,
+            message: "Current tier and target tier are required.",
+        });
+        return;
+    }
+    const targetTierInfo = getKYCTierInfo(targetTier);
+    if (!targetTierInfo) {
+        res.status(400).json({
+            success: false,
+            message: "Invalid target tier.",
+        });
+        return;
+    }
+    // Validate tier progression
+    if (targetTier <= currentTier) {
+        res.status(400).json({
+            success: false,
+            message: "Target tier must be higher than current tier.",
+        });
+        return;
+    }
+    // Check requirements for tier 2
+    if (targetTier === 2) {
+        if (!utilityBill || !idCard) {
+            res.status(400).json({
+                success: false,
+                message: "Tier 2 requires utility bill and ID card upload.",
+                missingDocuments: [
+                    ...(!utilityBill ? ["Utility bill"] : []),
+                    ...(!idCard ? ["ID card"] : [])
+                ]
+            });
+            return;
+        }
+    }
+    // Check requirements for tier 3
+    if (targetTier === 3) {
+        if (!proofOfAddress || !bankStatement) {
+            res.status(400).json({
+                success: false,
+                message: "Tier 3 requires proof of address and bank statement.",
+                missingDocuments: [
+                    ...(!proofOfAddress ? ["Proof of address"] : []),
+                    ...(!bankStatement ? ["Bank statement"] : [])
+                ]
+            });
+            return;
+        }
+    }
+    // Mock document verification (in production, this would involve actual document processing)
+    console.log(`
+╔════════════════════════════════════════════╗
+║        KYC TIER UPGRADE REQUEST            ║
+║ Current Tier: ${currentTier} → Target Tier: ${targetTier}      ║
+║ Documents received:                        ║
+${utilityBill ? "║ ✅ Utility Bill                             ║" : ""}
+${idCard ? "║ ✅ ID Card                                  ║" : ""}
+${proofOfAddress ? "║ ✅ Proof of Address                         ║" : ""}
+${bankStatement ? "║ ✅ Bank Statement                           ║" : ""}
+╚════════════════════════════════════════════╝
+  `);
+    res.json({
+        success: true,
+        message: `Successfully upgraded to ${targetTierInfo.name} tier!`,
+        data: {
+            newTier: targetTier,
+            tierName: targetTierInfo.name,
+            transactionLimit: targetTierInfo.transactionLimit,
+            description: targetTierInfo.description,
+            requirements: targetTierInfo.requirements,
+            upgradedAt: new Date().toISOString()
+        },
+        nextSteps: targetTier < 3
+            ? [`You can upgrade to Tier ${targetTier + 1} for higher limits`]
+            : ["You have the highest tier with unlimited transactions!"]
+    });
+};
+exports.upgradeKYCTier = upgradeKYCTier;
