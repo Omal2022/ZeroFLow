@@ -6,6 +6,7 @@ import AutoFillForm from "./pages/AutoFillForm.tsx";
 import FaceVerificationWrapper from "./pages/FaceVerificationWrapper.tsx";
 import AccountSuccess from "./pages/AccountSuccess.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Settings from "./pages/Settings.tsx";
 import CreateAcc from "./pages/CreateAcc.tsx";
 import Verification from "./pages/Verification.tsx";
 
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/face-verification" element={<FaceVerificationWrapper />} />
           <Route path="/success" element={<AccountSuccess />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
 
           {/* Legacy Routes */}
           <Route path="/old" element={<CreateAcc />} />

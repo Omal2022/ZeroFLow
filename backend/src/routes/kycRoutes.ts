@@ -5,7 +5,8 @@ import {
   verifyIdentity,
   verifyLocation,
   createAccount,
-  getTrustScore
+  getTrustScore,
+  upgradeKYCTier
 } from "../controllers/kycController";
 
 const router = express.Router();
@@ -23,5 +24,8 @@ router.post("/create-account", createAccount);
 
 // Trust score calculation
 router.post("/trust-score", getTrustScore);
+
+// KYC tier upgrade
+router.post("/upgrade", upgradeKYCTier);
 
 export default router;
