@@ -7,6 +7,37 @@ export default function Dashboard() {
   const accountData = location.state?.accountData;
 
   const [activeTab, setActiveTab] = useState("overview");
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [showCardModal, setShowCardModal] = useState(false);
+  const [pin, setPin] = useState("");
+  const [confirmPin, setConfirmPin] = useState("");
+  const [cardType, setCardType] = useState("virtual");
+
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to logout?")) {
+      navigate("/");
+    }
+  };
+
+  const handleSetPin = () => {
+    if (pin.length !== 4 || confirmPin.length !== 4) {
+      alert("PIN must be 4 digits");
+      return;
+    }
+    if (pin !== confirmPin) {
+      alert("PINs do not match");
+      return;
+    }
+    alert("PIN set successfully!");
+    setShowPinModal(false);
+    setPin("");
+    setConfirmPin("");
+  };
+
+  const handleRequestCard = () => {
+    alert(`${cardType === "physical" ? "Physical" : "Virtual"} card request submitted! You'll receive it within 5-7 business days.`);
+    setShowCardModal(false);
+  };
 
   if (!accountData) {
     return (
@@ -47,9 +78,24 @@ export default function Dashboard() {
             </div>
 
             <div className="flex items-center gap-4">
-              <button className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
+              <button
+                onClick={() => navigate("/settings", { state: { accountData } })}
+                className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                title="Settings"
+              >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="p-2 text-gray-300 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                title="Logout"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
               </button>
 
@@ -107,10 +153,10 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <p className="text-purple-200 text-xs mb-1">Account Number</p>
-                <p className="text-white font-mono font-semibold">{accountData.accountNumber}</p>
+                <p className="text-white font-mono font-semibold text-sm">{accountData.accountNumber}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <p className="text-purple-200 text-xs mb-1">Trust Score</p>
@@ -120,6 +166,13 @@ export default function Dashboard() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 </div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                <p className="text-purple-200 text-xs mb-1">KYC Tier</p>
+                <p className="text-white font-semibold">
+                  Tier {accountData.kycTier?.current || 1} - {accountData.kycTier?.name || "Basic"}
+                </p>
+                <p className="text-purple-200 text-xs mt-1">{accountData.kycTier?.description || "₦50,000/day"}</p>
               </div>
             </div>
 
@@ -146,7 +199,10 @@ export default function Dashboard() {
                 Quick Actions
               </h4>
               <div className="space-y-3">
-                <button className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left">
+                <button
+                  onClick={() => setShowCardModal(true)}
+                  className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left"
+                >
                   <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
                     <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -158,7 +214,10 @@ export default function Dashboard() {
                   </div>
                 </button>
 
-                <button className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left">
+                <button
+                  onClick={() => setShowPinModal(true)}
+                  className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left"
+                >
                   <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
                     <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -295,6 +354,130 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* PIN Modal */}
+      {showPinModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 border border-white/20 rounded-2xl p-6 max-w-md w-full">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-white">Set Transaction PIN</h3>
+              <button
+                onClick={() => setShowPinModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-gray-300 text-sm mb-2 block">Enter 4-digit PIN</label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="••••"
+                />
+              </div>
+
+              <div>
+                <label className="text-gray-300 text-sm mb-2 block">Confirm PIN</label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={confirmPin}
+                  onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ""))}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="••••"
+                />
+              </div>
+
+              <button
+                onClick={handleSetPin}
+                className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+              >
+                Set PIN
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Card Request Modal */}
+      {showCardModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 border border-white/20 rounded-2xl p-6 max-w-md w-full">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-white">Request Card</h3>
+              <button
+                onClick={() => setShowCardModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setCardType("virtual")}
+                  className={`p-4 rounded-xl border-2 transition-all ${
+                    cardType === "virtual"
+                      ? "border-purple-500 bg-purple-500/20"
+                      : "border-white/20 bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="text-center">
+                    <svg className="w-8 h-8 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <p className="text-white font-semibold text-sm">Virtual Card</p>
+                    <p className="text-gray-400 text-xs mt-1">Instant delivery</p>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setCardType("physical")}
+                  className={`p-4 rounded-xl border-2 transition-all ${
+                    cardType === "physical"
+                      ? "border-purple-500 bg-purple-500/20"
+                      : "border-white/20 bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="text-center">
+                    <svg className="w-8 h-8 text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <p className="text-white font-semibold text-sm">Physical Card</p>
+                    <p className="text-gray-400 text-xs mt-1">5-7 business days</p>
+                  </div>
+                </button>
+              </div>
+
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                <p className="text-blue-300 text-sm">
+                  {cardType === "virtual"
+                    ? "Your virtual card will be available instantly after approval."
+                    : "Your physical card will be delivered to your registered address within 5-7 business days."}
+                </p>
+              </div>
+
+              <button
+                onClick={handleRequestCard}
+                className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+              >
+                Request {cardType === "physical" ? "Physical" : "Virtual"} Card
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

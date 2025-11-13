@@ -1,16 +1,76 @@
 import express from "express";
 import { findNINRecord, findBVNRecord, maskDataByAccessLevel, NINRecord, BVNRecord } from "../mockDb/ninDatabase";
 
-// Account number generation: 42 + DDMMYY + 2 random digits
-export function generateAccountNumber(dob: string): string {
+// In-memory storage for created accounts (prevents duplicate accounts)
+interface AccountRecord {
+  accountNumber: string;
+  identityType: string;
+  identityNumber: string;
+  email: string;
+  phone: string;
+  createdAt: string;
+}
+
+const accountsStore: Map<string, AccountRecord> = new Map();
+
+// Check if account already exists
+export function checkExistingAccount(identityNumber: string): AccountRecord | null {
+  return accountsStore.get(identityNumber) || null;
+}
+
+// Store new account
+function storeAccount(identityNumber: string, accountData: AccountRecord): void {
+  accountsStore.set(identityNumber, accountData);
+}
+
+// Account number generation: 42 + last 4 NIN digits + YYMMDD
+export function generateAccountNumber(dob: string, nin: string): string {
   const date = new Date(dob);
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = String(date.getFullYear()).slice(-2);
 
-  const randomDigits = Math.floor(Math.random() * 90) + 10; // 10-99
+  // Get last 4 digits of NIN
+  const last4NIN = nin.slice(-4);
 
-  return `42${day}${month}${year}${randomDigits}`;
+  return `42${last4NIN}${year}${month}${day}`;
+}
+
+// KYC Tier System
+export interface KYCTier {
+  tier: number;
+  name: string;
+  requirements: string[];
+  transactionLimit: number;
+  description: string;
+}
+
+export const KYC_TIERS: KYCTier[] = [
+  {
+    tier: 1,
+    name: "Basic",
+    requirements: ["Email verification", "NIN verification"],
+    transactionLimit: 50000,
+    description: "₦50,000/day limit"
+  },
+  {
+    tier: 2,
+    name: "Standard",
+    requirements: ["Tier 1 requirements", "Utility bill", "ID card upload"],
+    transactionLimit: 500000,
+    description: "₦500,000/day limit"
+  },
+  {
+    tier: 3,
+    name: "Premium",
+    requirements: ["Tier 2 requirements", "Proof of address", "Bank statement"],
+    transactionLimit: Infinity,
+    description: "Unlimited transactions"
+  }
+];
+
+export function getKYCTierInfo(tier: number): KYCTier | null {
+  return KYC_TIERS.find(t => t.tier === tier) || null;
 }
 
 // Trust score calculation
@@ -234,6 +294,22 @@ export const createAccount = (req: express.Request, res: express.Response): void
     return;
   }
 
+  // Check for existing account with this identity number
+  const existingAccount = checkExistingAccount(identityNumber);
+  if (existingAccount) {
+    res.status(409).json({
+      success: false,
+      message: `An account already exists with this ${identityType}. You cannot create multiple accounts with the same identity.`,
+      existingAccountInfo: {
+        accountNumber: existingAccount.accountNumber,
+        email: existingAccount.email,
+        phone: existingAccount.phone,
+        createdAt: existingAccount.createdAt
+      }
+    });
+    return;
+  }
+
   // Verify identity first
   let verified = false;
   if (identityType === "NIN") {
@@ -252,8 +328,8 @@ export const createAccount = (req: express.Request, res: express.Response): void
     return;
   }
 
-  // Generate account number
-  const accountNumber = generateAccountNumber(dob);
+  // Generate account number with new formula: 42 + last 4 NIN + YYMMDD
+  const accountNumber = generateAccountNumber(dob, identityNumber);
 
   // Calculate trust score
   const trustScore = calculateTrustScore({
@@ -268,6 +344,31 @@ export const createAccount = (req: express.Request, res: express.Response): void
   // Auto-approve if trust score > 0.7
   const accountStatus = trustScore > 0.7 ? "active" : "pending_review";
 
+  // Assign KYC tier (Tier 1 by default for new accounts with email + NIN/BVN verification)
+  const kycTier = 1;
+  const tierInfo = getKYCTierInfo(kycTier);
+
+  // Store account to prevent duplicates
+  const createdAt = new Date().toISOString();
+  storeAccount(identityNumber, {
+    accountNumber,
+    identityType,
+    identityNumber,
+    email,
+    phone,
+    createdAt
+  });
+
+  console.log(`
+╔════════════════════════════════════════════╗
+║         NEW ACCOUNT CREATED                ║
+║ Account Number: ${accountNumber}           ║
+║ Identity: ${identityType} - ***${identityNumber.slice(-4)}        ║
+║ Email: ${email.padEnd(30)}║
+║ Status: ${accountStatus.padEnd(33)}║
+╚════════════════════════════════════════════╝
+  `);
+
   res.json({
     success: true,
     message: `Account created successfully! ${accountStatus === "active" ? "Your account is now active." : "Your account is under review."}`,
@@ -275,6 +376,12 @@ export const createAccount = (req: express.Request, res: express.Response): void
       accountNumber,
       accountStatus,
       trustScore,
+      kycTier: {
+        current: kycTier,
+        name: tierInfo?.name || "Basic",
+        transactionLimit: tierInfo?.transactionLimit || 50000,
+        description: tierInfo?.description || "₦50,000/day limit"
+      },
       user: {
         firstName,
         lastName,
@@ -309,5 +416,103 @@ export const getTrustScore = (req: express.Request, res: express.Response): void
       : score > 0.5
       ? "Manual review recommended"
       : "Additional verification required"
+  });
+};
+
+// KYC Tier Upgrade
+export const upgradeKYCTier = (req: express.Request, res: express.Response): void => {
+  const {
+    currentTier,
+    targetTier,
+    utilityBill,
+    idCard,
+    proofOfAddress,
+    bankStatement
+  } = req.body;
+
+  if (!currentTier || !targetTier) {
+    res.status(400).json({
+      success: false,
+      message: "Current tier and target tier are required.",
+    });
+    return;
+  }
+
+  const targetTierInfo = getKYCTierInfo(targetTier);
+
+  if (!targetTierInfo) {
+    res.status(400).json({
+      success: false,
+      message: "Invalid target tier.",
+    });
+    return;
+  }
+
+  // Validate tier progression
+  if (targetTier <= currentTier) {
+    res.status(400).json({
+      success: false,
+      message: "Target tier must be higher than current tier.",
+    });
+    return;
+  }
+
+  // Check requirements for tier 2
+  if (targetTier === 2) {
+    if (!utilityBill || !idCard) {
+      res.status(400).json({
+        success: false,
+        message: "Tier 2 requires utility bill and ID card upload.",
+        missingDocuments: [
+          ...(!utilityBill ? ["Utility bill"] : []),
+          ...(!idCard ? ["ID card"] : [])
+        ]
+      });
+      return;
+    }
+  }
+
+  // Check requirements for tier 3
+  if (targetTier === 3) {
+    if (!proofOfAddress || !bankStatement) {
+      res.status(400).json({
+        success: false,
+        message: "Tier 3 requires proof of address and bank statement.",
+        missingDocuments: [
+          ...(!proofOfAddress ? ["Proof of address"] : []),
+          ...(!bankStatement ? ["Bank statement"] : [])
+        ]
+      });
+      return;
+    }
+  }
+
+  // Mock document verification (in production, this would involve actual document processing)
+  console.log(`
+╔════════════════════════════════════════════╗
+║        KYC TIER UPGRADE REQUEST            ║
+║ Current Tier: ${currentTier} → Target Tier: ${targetTier}      ║
+║ Documents received:                        ║
+${utilityBill ? "║ ✅ Utility Bill                             ║" : ""}
+${idCard ? "║ ✅ ID Card                                  ║" : ""}
+${proofOfAddress ? "║ ✅ Proof of Address                         ║" : ""}
+${bankStatement ? "║ ✅ Bank Statement                           ║" : ""}
+╚════════════════════════════════════════════╝
+  `);
+
+  res.json({
+    success: true,
+    message: `Successfully upgraded to ${targetTierInfo.name} tier!`,
+    data: {
+      newTier: targetTier,
+      tierName: targetTierInfo.name,
+      transactionLimit: targetTierInfo.transactionLimit,
+      description: targetTierInfo.description,
+      requirements: targetTierInfo.requirements,
+      upgradedAt: new Date().toISOString()
+    },
+    nextSteps: targetTier < 3
+      ? [`You can upgrade to Tier ${targetTier + 1} for higher limits`]
+      : ["You have the highest tier with unlimited transactions!"]
   });
 };

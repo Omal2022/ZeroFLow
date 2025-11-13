@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 
 import onboardingRoute from "./routes/onboardingRoute";
 import kycRoutes from "./routes/kycRoutes";
+import authRoutes from "./routes/authRoutes";
 
 
 console.log("PORT from .env:", process.env.PORT);
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 app.use("/onboarding", onboardingRoute);
 app.use("/kyc", kycRoutes);
+app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
