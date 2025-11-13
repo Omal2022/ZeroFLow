@@ -29,6 +29,14 @@ export default function AutoFillForm() {
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [gpsData, setGpsData] = useState<{ latitude: number; longitude: number } | null>(null);
 
+  // Email verification states
+  const [emailToken, setEmailToken] = useState("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [tokenSent, setTokenSent] = useState(false);
+  const [sendingToken, setSendingToken] = useState(false);
+  const [verifyingToken, setVerifyingToken] = useState(false);
+  const [tokenError, setTokenError] = useState("");
+
   useEffect(() => {
     if (!state?.verificationData) {
       navigate("/identity");
@@ -97,10 +105,101 @@ export default function AutoFillForm() {
     }
   };
 
+  const handleSendToken = async () => {
+    if (!formData.email) {
+      setTokenError("Please enter your email address first");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setTokenError("Please enter a valid email address");
+      return;
+    }
+
+    setSendingToken(true);
+    setTokenError("");
+
+    try {
+      const response = await fetch("http://localhost:5000/auth/send-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setTokenSent(true);
+        // In demo mode, auto-fill the token (remove this in production)
+        if (data.demoToken) {
+          console.log("Demo token:", data.demoToken);
+        }
+      } else {
+        setTokenError(data.message || "Failed to send verification code");
+      }
+    } catch (error) {
+      console.error("Error sending token:", error);
+      setTokenError("Network error. Please try again.");
+    } finally {
+      setSendingToken(false);
+    }
+  };
+
+  const handleVerifyToken = async () => {
+    if (!emailToken || emailToken.length !== 6) {
+      setTokenError("Please enter the 6-digit verification code");
+      return;
+    }
+
+    setVerifyingToken(true);
+    setTokenError("");
+
+    try {
+      const response = await fetch("http://localhost:5000/auth/verify-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          token: emailToken
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setIsEmailVerified(true);
+        setTokenError("");
+      } else {
+        setTokenError(data.message || "Invalid verification code");
+        setIsEmailVerified(false);
+      }
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      setTokenError("Network error. Please try again.");
+      setIsEmailVerified(false);
+    } finally {
+      setVerifyingToken(false);
+    }
+  };
+
+  const handleResendToken = async () => {
+    setEmailToken("");
+    setTokenError("");
+    await handleSendToken();
+  };
+
   const handleContinue = async () => {
     // Validate required fields
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.dob) {
       alert("Please fill in all required fields");
+      return;
+    }
+
+    // Check email verification
+    if (!isEmailVerified) {
+      alert("Please verify your email address before continuing");
       return;
     }
 
@@ -264,19 +363,101 @@ export default function AutoFillForm() {
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+                <div className="md:col-span-2">
                   <label className="block text-white text-sm font-medium mb-2">
                     Email Address *
                   </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="you@example.com"
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/15"
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={(e) => {
+                        handleChange(e);
+                        // Reset verification if email changes
+                        setIsEmailVerified(false);
+                        setTokenSent(false);
+                        setEmailToken("");
+                        setTokenError("");
+                      }}
+                      placeholder="you@example.com"
+                      className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/15"
+                      required
+                      disabled={isEmailVerified}
+                    />
+                    {!isEmailVerified && (
+                      <button
+                        type="button"
+                        onClick={handleSendToken}
+                        disabled={sendingToken || !formData.email}
+                        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all whitespace-nowrap"
+                      >
+                        {sendingToken ? "Sending..." : tokenSent ? "Resend Code" : "Send Code"}
+                      </button>
+                    )}
+                    {isEmailVerified && (
+                      <div className="px-6 py-3 bg-green-500/20 border border-green-500/30 rounded-xl flex items-center gap-2">
+                        <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-green-300 font-medium">Verified</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Token input - shown after token is sent */}
+                  {tokenSent && !isEmailVerified && (
+                    <div className="mt-3">
+                      <label className="block text-white text-sm font-medium mb-2">
+                        Enter Verification Code (Check your email)
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={emailToken}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                            setEmailToken(value);
+                            setTokenError("");
+                          }}
+                          placeholder="000000"
+                          maxLength={6}
+                          className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:bg-white/15 text-center text-2xl tracking-widest"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleVerifyToken}
+                          disabled={verifyingToken || emailToken.length !== 6}
+                          className="px-6 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all"
+                        >
+                          {verifyingToken ? "Verifying..." : "Verify"}
+                        </button>
+                      </div>
+
+                      {/* Resend link */}
+                      <div className="mt-2 text-sm text-gray-300">
+                        Didn't receive the code?{" "}
+                        <button
+                          type="button"
+                          onClick={handleResendToken}
+                          disabled={sendingToken}
+                          className="text-blue-400 hover:text-blue-300 underline"
+                        >
+                          Resend
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Error message */}
+                  {tokenError && (
+                    <div className="mt-2 text-red-400 text-sm flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      </svg>
+                      {tokenError}
+                    </div>
+                  )}
                 </div>
 
                 <div>
