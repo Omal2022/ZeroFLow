@@ -51,7 +51,21 @@ export default function FaceVerificationWrapper() {
           });
         }, 1000);
       } else {
-        alert("Account creation failed: " + data.message);
+        // Handle duplicate account error (409 Conflict)
+        if (response.status === 409 && data.existingAccountInfo) {
+          const existingInfo = data.existingAccountInfo;
+          const confirmMessage = `${data.message}\n\nExisting Account Details:\n` +
+            `Account Number: ${existingInfo.accountNumber}\n` +
+            `Email: ${existingInfo.email}\n` +
+            `Phone: ${existingInfo.phone}\n` +
+            `Created: ${new Date(existingInfo.createdAt).toLocaleString()}\n\n` +
+            `Click OK to return to the start.`;
+
+          alert(confirmMessage);
+          navigate("/");
+        } else {
+          alert("Account creation failed: " + data.message);
+        }
       }
     } catch (error) {
       console.error("Account creation error:", error);

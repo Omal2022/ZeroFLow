@@ -1,6 +1,28 @@
 import express from "express";
 import { findNINRecord, findBVNRecord, maskDataByAccessLevel, NINRecord, BVNRecord } from "../mockDb/ninDatabase";
 
+// In-memory storage for created accounts (prevents duplicate accounts)
+interface AccountRecord {
+  accountNumber: string;
+  identityType: string;
+  identityNumber: string;
+  email: string;
+  phone: string;
+  createdAt: string;
+}
+
+const accountsStore: Map<string, AccountRecord> = new Map();
+
+// Check if account already exists
+export function checkExistingAccount(identityNumber: string): AccountRecord | null {
+  return accountsStore.get(identityNumber) || null;
+}
+
+// Store new account
+function storeAccount(identityNumber: string, accountData: AccountRecord): void {
+  accountsStore.set(identityNumber, accountData);
+}
+
 // Account number generation: 42 + last 4 NIN digits + YYMMDD
 export function generateAccountNumber(dob: string, nin: string): string {
   const date = new Date(dob);
@@ -272,6 +294,22 @@ export const createAccount = (req: express.Request, res: express.Response): void
     return;
   }
 
+  // Check for existing account with this identity number
+  const existingAccount = checkExistingAccount(identityNumber);
+  if (existingAccount) {
+    res.status(409).json({
+      success: false,
+      message: `An account already exists with this ${identityType}. You cannot create multiple accounts with the same identity.`,
+      existingAccountInfo: {
+        accountNumber: existingAccount.accountNumber,
+        email: existingAccount.email,
+        phone: existingAccount.phone,
+        createdAt: existingAccount.createdAt
+      }
+    });
+    return;
+  }
+
   // Verify identity first
   let verified = false;
   if (identityType === "NIN") {
@@ -309,6 +347,27 @@ export const createAccount = (req: express.Request, res: express.Response): void
   // Assign KYC tier (Tier 1 by default for new accounts with email + NIN/BVN verification)
   const kycTier = 1;
   const tierInfo = getKYCTierInfo(kycTier);
+
+  // Store account to prevent duplicates
+  const createdAt = new Date().toISOString();
+  storeAccount(identityNumber, {
+    accountNumber,
+    identityType,
+    identityNumber,
+    email,
+    phone,
+    createdAt
+  });
+
+  console.log(`
+╔════════════════════════════════════════════╗
+║         NEW ACCOUNT CREATED                ║
+║ Account Number: ${accountNumber}           ║
+║ Identity: ${identityType} - ***${identityNumber.slice(-4)}        ║
+║ Email: ${email.padEnd(30)}║
+║ Status: ${accountStatus.padEnd(33)}║
+╚════════════════════════════════════════════╝
+  `);
 
   res.json({
     success: true,
