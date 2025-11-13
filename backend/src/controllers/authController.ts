@@ -1,4 +1,5 @@
 import express from "express";
+import { sendVerificationEmail } from "../services/emailService";
 
 // In-memory storage for tokens (in production, use database)
 interface TokenStore {
@@ -17,7 +18,7 @@ function generateToken(): string {
 }
 
 // Send token to email (POST /auth/send-token)
-export const sendToken = (req: express.Request, res: express.Response): void => {
+export const sendToken = async (req: express.Request, res: express.Response): Promise<void> => {
   const { email } = req.body;
 
   if (!email || !email.includes('@')) {
@@ -39,8 +40,21 @@ export const sendToken = (req: express.Request, res: express.Response): void => 
     verified: false
   };
 
-  // Simulate sending email (in production, use SendGrid, AWS SES, etc.)
-  console.log(`
+  // Send email using nodemailer
+  try {
+    const emailSent = await sendVerificationEmail(email, token);
+
+    if (emailSent) {
+      console.log(`✅ Verification email sent successfully to ${email}`);
+
+      res.json({
+        success: true,
+        message: "Verification code sent to your email. Please check your inbox.",
+        expiresIn: "10 minutes"
+      });
+    } else {
+      // Email failed but token is still generated (fallback to console for demo)
+      console.log(`
 ╔════════════════════════════════════════════╗
 ║        EMAIL TOKEN VERIFICATION            ║
 ╠════════════════════════════════════════════╣
@@ -53,17 +67,41 @@ export const sendToken = (req: express.Request, res: express.Response): void => 
 ║                                            ║
 ║ This code expires in 10 minutes.           ║
 ║                                            ║
-║ If you didn't request this, ignore it.     ║
+║ ⚠️  Email sending failed - using console   ║
 ╚════════════════════════════════════════════╝
-  `);
+      `);
 
-  res.json({
-    success: true,
-    message: "Verification token sent to your email. Check console for demo.",
-    expiresIn: "10 minutes",
-    // For demo purposes only - remove in production!
-    demoToken: token
-  });
+      res.json({
+        success: true,
+        message: "Email service unavailable. Check server console for token (demo mode).",
+        expiresIn: "10 minutes",
+        // For demo/fallback only
+        demoToken: token
+      });
+    }
+  } catch (error) {
+    console.error('❌ Error in sendToken:', error);
+
+    // Fallback to console logging for demo
+    console.log(`
+╔════════════════════════════════════════════╗
+║        EMAIL TOKEN VERIFICATION            ║
+╠════════════════════════════════════════════╣
+║ To: ${email}
+║ Your verification code is: ${token}        ║
+║ This code expires in 10 minutes.           ║
+║                                            ║
+║ ⚠️  Email service error - check config     ║
+╚════════════════════════════════════════════╝
+    `);
+
+    res.json({
+      success: true,
+      message: "Email service error. Check server console for token (demo mode).",
+      expiresIn: "10 minutes",
+      demoToken: token
+    });
+  }
 };
 
 // Verify token (POST /auth/verify-token)
@@ -149,7 +187,7 @@ export const checkVerification = (req: express.Request, res: express.Response): 
 };
 
 // Resend token
-export const resendToken = (req: express.Request, res: express.Response): void => {
+export const resendToken = async (req: express.Request, res: express.Response): Promise<void> => {
   const { email } = req.body;
 
   if (!email) {
@@ -164,5 +202,5 @@ export const resendToken = (req: express.Request, res: express.Response): void =
   delete tokenStore[email];
 
   // Call sendToken logic
-  sendToken(req, res);
+  await sendToken(req, res);
 };
