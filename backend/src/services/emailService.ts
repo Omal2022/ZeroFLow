@@ -20,7 +20,7 @@ export const createTransporter = () => {
     throw new Error('Gmail credentials not configured. Please set GMAIL_USER and GMAIL_PASS in .env file');
   }
 
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: gmailUser,
