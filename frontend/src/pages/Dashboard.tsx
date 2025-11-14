@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   if (!accountData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-white text-xl mb-4">No account data found</p>
           <button
@@ -60,13 +60,13 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br bg-red-700 rounded-lg flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
@@ -120,7 +120,7 @@ export default function Dashboard() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Welcome Banner */}
-        <div className="mb-8 p-6 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-2xl">
+        <div className="mb-8 p-6 bg-gradient-to-r bg-red-900/20 border border-red-700/30 rounded-2xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
@@ -141,12 +141,12 @@ export default function Dashboard() {
 
         {/* Account Balance Card */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-6 md:p-8 shadow-2xl">
+          <div className="lg:col-span-2 bg-gradient-to-br bg-red-700 rounded-2xl p-6 md:p-8 shadow-2xl">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <p className="text-purple-200 text-sm mb-1">Available Balance</p>
+                <p className="text-gray-300 text-sm mb-1">Available Balance</p>
                 <h3 className="text-4xl md:text-5xl font-bold text-white">₦1,000.00</h3>
-                <p className="text-purple-200 text-sm mt-2">Opening Bonus Credited</p>
+                <p className="text-gray-300 text-sm mt-2">Opening Bonus Credited</p>
               </div>
               <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
                 <p className="text-white text-xs font-medium">NGN</p>
@@ -155,11 +155,11 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <p className="text-purple-200 text-xs mb-1">Account Number</p>
+                <p className="text-gray-300 text-xs mb-1">Account Number</p>
                 <p className="text-white font-mono font-semibold text-sm">{accountData.accountNumber}</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <p className="text-purple-200 text-xs mb-1">Trust Score</p>
+                <p className="text-gray-300 text-xs mb-1">Trust Score</p>
                 <div className="flex items-center gap-2">
                   <p className="text-white font-semibold">{(accountData.trustScore * 100).toFixed(0)}%</p>
                   <svg className="w-4 h-4 text-green-300" fill="currentColor" viewBox="0 0 20 20">
@@ -168,11 +168,11 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <p className="text-purple-200 text-xs mb-1">KYC Tier</p>
+                <p className="text-gray-300 text-xs mb-1">KYC Tier</p>
                 <p className="text-white font-semibold">
                   Tier {accountData.kycTier?.current || 1} - {accountData.kycTier?.name || "Basic"}
                 </p>
-                <p className="text-purple-200 text-xs mt-1">{accountData.kycTier?.description || "₦50,000/day"}</p>
+                <p className="text-gray-300 text-xs mt-1">{accountData.kycTier?.description || "₦50,000/day"}</p>
               </div>
             </div>
 
@@ -193,7 +193,7 @@ export default function Dashboard() {
           <div className="space-y-4">
             <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
               <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 Quick Actions
@@ -203,8 +203,8 @@ export default function Dashboard() {
                   onClick={() => setShowCardModal(true)}
                   className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left"
                 >
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
                   </div>
@@ -230,8 +230,8 @@ export default function Dashboard() {
                 </button>
 
                 <button className="w-full flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left">
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-red-700/20 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
@@ -253,7 +253,7 @@ export default function Dashboard() {
                 onClick={() => setActiveTab("overview")}
                 className={`px-6 py-4 text-sm font-medium transition-all ${
                   activeTab === "overview"
-                    ? "text-white border-b-2 border-purple-500 bg-white/5"
+                    ? "text-white border-b-2 border-red-700 bg-white/5"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -263,7 +263,7 @@ export default function Dashboard() {
                 onClick={() => setActiveTab("transactions")}
                 className={`px-6 py-4 text-sm font-medium transition-all ${
                   activeTab === "transactions"
-                    ? "text-white border-b-2 border-purple-500 bg-white/5"
+                    ? "text-white border-b-2 border-red-700 bg-white/5"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -273,7 +273,7 @@ export default function Dashboard() {
                 onClick={() => setActiveTab("profile")}
                 className={`px-6 py-4 text-sm font-medium transition-all ${
                   activeTab === "profile"
-                    ? "text-white border-b-2 border-purple-500 bg-white/5"
+                    ? "text-white border-b-2 border-red-700 bg-white/5"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -379,7 +379,7 @@ export default function Dashboard() {
                   maxLength={4}
                   value={pin}
                   onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700"
                   placeholder="••••"
                 />
               </div>
@@ -391,14 +391,14 @@ export default function Dashboard() {
                   maxLength={4}
                   value={confirmPin}
                   onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ""))}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700"
                   placeholder="••••"
                 />
               </div>
 
               <button
                 onClick={handleSetPin}
-                className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                className="w-full py-3 bg-gradient-to-r bg-red-700 text-white font-semibold rounded-lg hover:bg-red-800 transition-all"
               >
                 Set PIN
               </button>
@@ -429,12 +429,12 @@ export default function Dashboard() {
                   onClick={() => setCardType("virtual")}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     cardType === "virtual"
-                      ? "border-purple-500 bg-purple-500/20"
+                      ? "border-red-700 bg-red-700/20"
                       : "border-white/20 bg-white/5 hover:bg-white/10"
                   }`}
                 >
                   <div className="text-center">
-                    <svg className="w-8 h-8 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                     <p className="text-white font-semibold text-sm">Virtual Card</p>
@@ -446,12 +446,12 @@ export default function Dashboard() {
                   onClick={() => setCardType("physical")}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     cardType === "physical"
-                      ? "border-purple-500 bg-purple-500/20"
+                      ? "border-red-700 bg-red-700/20"
                       : "border-white/20 bg-white/5 hover:bg-white/10"
                   }`}
                 >
                   <div className="text-center">
-                    <svg className="w-8 h-8 text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 text-white mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
                     <p className="text-white font-semibold text-sm">Physical Card</p>
@@ -460,8 +460,8 @@ export default function Dashboard() {
                 </button>
               </div>
 
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <p className="text-blue-300 text-sm">
+              <div className="bg-white/5 border border-white/20 rounded-lg p-4">
+                <p className="text-white text-sm">
                   {cardType === "virtual"
                     ? "Your virtual card will be available instantly after approval."
                     : "Your physical card will be delivered to your registered address within 5-7 business days."}
@@ -470,7 +470,7 @@ export default function Dashboard() {
 
               <button
                 onClick={handleRequestCard}
-                className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                className="w-full py-3 bg-gradient-to-r bg-red-700 text-white font-semibold rounded-lg hover:bg-red-800 transition-all"
               >
                 Request {cardType === "physical" ? "Physical" : "Virtual"} Card
               </button>

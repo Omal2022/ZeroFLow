@@ -215,7 +215,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
         maxWidth: "600px",
         margin: "2rem auto",
         padding: "2rem",
-        backgroundColor: "#001529",
+        backgroundColor: "#1a1a1a",
         borderRadius: "16px",
         color: "white",
         boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
@@ -235,7 +235,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
         <div
           style={{
             padding: "1rem",
-            backgroundColor: "#dc2626",
+            backgroundColor: "#ac0509",
             borderRadius: "8px",
             marginBottom: "1rem",
             fontSize: "0.9rem",
@@ -248,7 +248,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
       <div
         style={{
           padding: "1rem",
-          backgroundColor: movements.faceVisible ? "#065f46" : "#1e3a8a",
+          backgroundColor: movements.faceVisible ? "#065f46" : "#ac0509",
           borderRadius: "8px",
           marginBottom: "1rem",
           fontSize: "0.95rem",
@@ -289,7 +289,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
           margin: "0 auto 1rem",
           borderRadius: "12px",
           overflow: "hidden",
-          border: `4px solid ${movements.faceVisible ? "#10b981" : "#3b82f6"}`,
+          border: `4px solid ${movements.faceVisible ? "#10b981" : "#ac0509"}`,
           backgroundColor: "#000",
         }}
       >
@@ -355,7 +355,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
       {/* Movement Checklist */}
       <div
         style={{
-          backgroundColor: "#0f172a",
+          backgroundColor: "#1a1a1a",
           padding: "1.25rem",
           borderRadius: "12px",
           marginBottom: "1rem",
@@ -403,7 +403,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
           style={{
             textAlign: "center",
             padding: "1rem",
-            backgroundColor: "#0f172a",
+            backgroundColor: "#1a1a1a",
             borderRadius: "12px",
             marginBottom: "1rem",
           }}
@@ -431,7 +431,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
           style={{
             flex: 1,
             padding: "0.875rem",
-            backgroundColor: "#ef4444",
+            backgroundColor: "#ac0509",
             border: "none",
             borderRadius: "8px",
             cursor: "pointer",
@@ -449,7 +449,7 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
             style={{
               flex: 1,
               padding: "0.875rem",
-              backgroundColor: "#f59e0b",
+              backgroundColor: "#ac0509",
               border: "none",
               borderRadius: "8px",
               cursor: "pointer",

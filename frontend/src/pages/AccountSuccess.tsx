@@ -55,12 +55,12 @@ export default function AccountSuccess() {
 
   if (!state?.accountData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-white text-xl mb-4">No account data found</p>
           <button
             onClick={() => navigate("/")}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg"
+            className="px-6 py-3 bg-white text-white rounded-lg"
           >
             Start Over
           </button>
@@ -70,7 +70,7 @@ export default function AccountSuccess() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
         {showConfetti && (
@@ -78,7 +78,7 @@ export default function AccountSuccess() {
             {[...Array(50)].map((_, i) => (
               <div
                 key={i}
-                className="absolute w-2 h-2 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full animate-confetti"
+                className="absolute w-2 h-2 bg-gradient-to-r from-red-600 to-red-800 rounded-full animate-confetti"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `-10px`,
@@ -90,7 +90,7 @@ export default function AccountSuccess() {
           </>
         )}
         <div className="absolute top-20 left-20 w-96 h-96 bg-green-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-red-900 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-3xl">
@@ -118,17 +118,17 @@ export default function AccountSuccess() {
           </div>
 
           {/* Account Number Display */}
-          <div className="mb-8 p-6 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-2 border-purple-500/50 rounded-2xl text-center animate-fade-in-up animation-delay-400">
+          <div className="mb-8 p-6 bg-gradient-to-r bg-white/5 border-2 border-white/50 rounded-2xl text-center animate-fade-in-up animation-delay-400">
             <p className="text-gray-300 text-sm mb-2">Your Account Number</p>
             <p className="text-4xl md:text-5xl font-bold text-white tracking-wider font-mono">
               {accountNumber}
               {accountNumber.length < (state?.accountData?.accountNumber?.length || 0) && (
-                <span className="inline-block w-1 h-10 bg-purple-500 ml-1 animate-pulse"></span>
+                <span className="inline-block w-1 h-10 bg-red-600 ml-1 animate-pulse"></span>
               )}
             </p>
             <button
               onClick={() => navigator.clipboard.writeText(state?.accountData?.accountNumber)}
-              className="mt-4 text-purple-400 hover:text-purple-300 text-sm flex items-center gap-2 mx-auto"
+              className="mt-4 text-white hover:text-white text-sm flex items-center gap-2 mx-auto"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -141,8 +141,8 @@ export default function AccountSuccess() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -159,14 +159,14 @@ export default function AccountSuccess() {
 
             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
                 <div>
                   <p className="text-gray-400 text-xs">Trust Score</p>
-                  <p className="text-sm font-semibold text-purple-400">
+                  <p className="text-sm font-semibold text-white">
                     {((state?.accountData?.trustScore || 0) * 100).toFixed(0)}%
                   </p>
                 </div>
@@ -191,7 +191,7 @@ export default function AccountSuccess() {
           {/* User Details */}
           <div className="mb-8 p-6 bg-white/5 rounded-xl border border-white/10">
             <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               Account Holder Details
@@ -222,7 +222,7 @@ export default function AccountSuccess() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               onClick={handleGoToDashboard}
-              className="py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-lg rounded-xl hover:shadow-lg hover:shadow-purple-500/50 hover:scale-[1.02] transition-all duration-300"
+              className="py-4 bg-gradient-to-r bg-red-600 text-white font-semibold text-lg rounded-xl hover:shadow-lg hover:shadow-red-600/50 hover:scale-[1.02] transition-all duration-300"
             >
               <span className="flex items-center justify-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -246,8 +246,8 @@ export default function AccountSuccess() {
           </div>
 
           {/* What's Next */}
-          <div className="mt-8 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-            <h4 className="text-blue-300 font-semibold mb-3 flex items-center gap-2">
+          <div className="mt-8 p-4 bg-white/5 border border-white/20 rounded-xl">
+            <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>

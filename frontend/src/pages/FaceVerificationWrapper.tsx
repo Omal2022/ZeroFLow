@@ -79,16 +79,16 @@ export default function FaceVerificationWrapper() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       {/* Progress bar */}
       <div className="max-w-4xl mx-auto px-4 pt-8">
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-gray-300">Step 3 of 5</span>
-            <span className="text-sm text-purple-300">60% Complete</span>
+            <span className="text-sm text-red-500">60% Complete</span>
           </div>
           <div className="w-full bg-gray-700 rounded-full h-2">
-            <div className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500" style={{ width: "60%" }}></div>
+            <div className="bg-gradient-to-r bg-red-700 h-2 rounded-full transition-all duration-500" style={{ width: "60%" }}></div>
           </div>
         </div>
 
@@ -117,8 +117,8 @@ export default function FaceVerificationWrapper() {
             <h3 className="text-2xl font-bold text-white mb-2">Verification Complete!</h3>
             <p className="text-gray-300">Creating your account...</p>
             <div className="mt-4 flex items-center justify-center gap-2">
-              <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce"></div>
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce animation-delay-200"></div>
+              <div className="w-3 h-3 bg-red-700 rounded-full animate-bounce"></div>
+              <div className="w-3 h-3 bg-red-600 rounded-full animate-bounce animation-delay-200"></div>
               <div className="w-3 h-3 bg-pink-500 rounded-full animate-bounce animation-delay-400"></div>
             </div>
           </div>

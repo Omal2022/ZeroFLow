@@ -43,12 +43,12 @@ export default function Settings() {
 
   if (!accountData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-white text-xl mb-4">No account data found</p>
           <button
             onClick={() => navigate("/")}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg"
+            className="px-6 py-3 bg-red-700 text-white rounded-lg"
           >
             Start Over
           </button>
@@ -118,7 +118,7 @@ export default function Settings() {
   const currentTierInfo = KYC_TIERS.find(t => t.tier === currentTier);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       {/* Header */}
       <header className="bg-white/10 backdrop-blur-lg border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -152,14 +152,14 @@ export default function Settings() {
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Current KYC Tier */}
-        <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 mb-8 shadow-2xl">
+        <div className="bg-gradient-to-br bg-red-700 rounded-2xl p-8 mb-8 shadow-2xl">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-purple-200 text-sm mb-2">Current KYC Tier</p>
+              <p className="text-gray-300 text-sm mb-2">Current KYC Tier</p>
               <h2 className="text-4xl font-bold text-white mb-2">
                 Tier {currentTier} - {currentTierInfo?.name}
               </h2>
-              <p className="text-purple-200 text-lg">{currentTierInfo?.description}</p>
+              <p className="text-gray-300 text-lg">{currentTierInfo?.description}</p>
             </div>
             <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full">
               <p className="text-white text-2xl font-bold">🎯</p>
@@ -167,7 +167,7 @@ export default function Settings() {
           </div>
 
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-            <p className="text-purple-200 text-sm mb-2">Transaction Limit</p>
+            <p className="text-gray-300 text-sm mb-2">Transaction Limit</p>
             <p className="text-white text-2xl font-bold">
               {currentTierInfo?.transactionLimit === Infinity
                 ? "Unlimited"
@@ -188,7 +188,7 @@ export default function Settings() {
                     ? "border-green-500 bg-green-500/10"
                     : tier.tier < currentTier
                     ? "border-white/10 bg-white/5 opacity-50"
-                    : "border-purple-500/30 bg-white/5 hover:bg-white/10"
+                    : "border-red-700/30 bg-white/5 hover:bg-white/10"
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -212,7 +212,7 @@ export default function Settings() {
                   <p className="text-gray-400 text-xs font-semibold">Requirements:</p>
                   {tier.requirements.map((req, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <svg className="w-4 h-4 text-purple-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 text-gray-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       <p className="text-gray-300 text-xs">{req}</p>
@@ -226,7 +226,7 @@ export default function Settings() {
                       setTargetTier(tier.tier);
                       setShowUpgradeModal(true);
                     }}
-                    className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg transition-all"
+                    className="w-full py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-semibold rounded-lg transition-all"
                   >
                     Upgrade to Tier {tier.tier}
                   </button>
@@ -290,7 +290,7 @@ export default function Settings() {
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange("utilityBill", e.target.files?.[0] || null)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-red-700 file:text-white hover:file:bg-red-800"
                     />
                     {documents.utilityBill && (
                       <p className="text-green-400 text-xs mt-2">✓ {documents.utilityBill.name}</p>
@@ -305,7 +305,7 @@ export default function Settings() {
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange("idCard", e.target.files?.[0] || null)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-red-700 file:text-white hover:file:bg-red-800"
                     />
                     {documents.idCard && (
                       <p className="text-green-400 text-xs mt-2">✓ {documents.idCard.name}</p>
@@ -325,7 +325,7 @@ export default function Settings() {
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange("proofOfAddress", e.target.files?.[0] || null)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-red-700 file:text-white hover:file:bg-red-800"
                     />
                     {documents.proofOfAddress && (
                       <p className="text-green-400 text-xs mt-2">✓ {documents.proofOfAddress.name}</p>
@@ -340,7 +340,7 @@ export default function Settings() {
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange("bankStatement", e.target.files?.[0] || null)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-purple-600 file:text-white hover:file:bg-purple-700"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-red-700 file:text-white hover:file:bg-red-800"
                     />
                     {documents.bankStatement && (
                       <p className="text-green-400 text-xs mt-2">✓ {documents.bankStatement.name}</p>
@@ -349,8 +349,8 @@ export default function Settings() {
                 </div>
               )}
 
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <p className="text-blue-300 text-sm">
+              <div className="bg-white/5 border border-white/20 rounded-lg p-4">
+                <p className="text-white text-sm">
                   <strong>Note:</strong> Your documents will be reviewed within 24-48 hours. You'll be notified once your tier upgrade is approved.
                 </p>
               </div>
@@ -358,7 +358,7 @@ export default function Settings() {
               <button
                 onClick={handleUpgrade}
                 disabled={isUploading}
-                className="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-gradient-to-r bg-red-700 text-white font-semibold rounded-lg hover:bg-red-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isUploading ? "Uploading..." : `Submit Upgrade Request`}
               </button>
