@@ -1,6 +1,5 @@
 /* Additional custom styles - Tailwind is loaded via CDN in index.html */
-
-/* Base reset */
+@import "tailwindcss";/* Base reset */
 * {
   margin: 0;
   padding: 0;
