@@ -1,12 +1,12 @@
 /* App Container */
 .app {
   min-height: 100vh;
-  background-color: var(--zenith-white);
+  background-color: #ffffff;
 }
 
 /* Header/Navbar */
 .header {
-  background-color: var(--zenith-white);
+  background-color: #ffffff;
   padding: 1.5rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
@@ -17,7 +17,7 @@
 .logo {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--zenith-red);
+  color: #7c3aed;
   letter-spacing: -0.5px;
   text-align: left;
   margin: 0;
@@ -32,15 +32,15 @@
 
 /* Verification Page */
 .verification-container {
-  background: var(--zenith-white);
-  border: 2px solid var(--zenith-red);
+  background: #ffffff;
+  border: 2px solid #7c3aed;
   border-radius: 12px;
   padding: 2.5rem;
-  box-shadow: 0 4px 16px rgba(227, 0, 15, 0.1);
+  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.1);
 }
 
 .verification-container h2 {
-  color: var(--zenith-red);
+  color: #7c3aed;
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
 }
@@ -55,17 +55,17 @@
 .option-button {
   padding: 1.2rem;
   font-size: 1.1rem;
-  border: 2px solid var(--zenith-red);
-  background-color: var(--zenith-white);
-  color: var(--zenith-red);
+  border: 2px solid #7c3aed;
+  background-color: #ffffff;
+  color: #7c3aed;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .option-button:hover {
-  background-color: var(--zenith-red);
-  color: var(--zenith-white);
+  background-color: #7c3aed;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -85,7 +85,7 @@
 
 .form-group label {
   font-weight: 600;
-  color: var(--text-dark);
+  color: #333333;
   font-size: 0.95rem;
 }
 
@@ -99,19 +99,19 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--zenith-red);
+  border-color: #7c3aed;
 }
 
 .back-button {
-  background-color: var(--zenith-white);
-  color: var(--zenith-red);
-  border: 2px solid var(--zenith-red);
+  background-color: #ffffff;
+  color: #7c3aed;
+  border: 2px solid #7c3aed;
 }
 
 .back-button:hover {
-  background-color: var(--zenith-red-light);
-  color: var(--zenith-white);
-  border-color: var(--zenith-red-light);
+  background-color: #a78bfa;
+  color: #ffffff;
+  border-color: #a78bfa;
 }
 
 .success-message {

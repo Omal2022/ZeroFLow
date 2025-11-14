@@ -7,27 +7,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  /* Zenith Bank Color Scheme */
-  --zenith-red: #E3000F;
-  --zenith-white: #FFFFFF;
-  --zenith-red-hover: #C00000;
-  --zenith-red-light: #F68A8E;
-  --text-dark: #333333;
-
-  color: var(--text-dark);
-  background-color: var(--zenith-white);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 /* Loading animation */
 @keyframes shimmer {
   0% {
@@ -42,48 +21,4 @@
   animation: shimmer 1.5s infinite linear;
   background: linear-gradient(to right, #1e293b 0%, #334155 20%, #1e293b 40%, #1e293b 100%);
   background-size: 800px 104px;
-}
-
-a {
-  font-weight: 500;
-  color: var(--zenith-red);
-  text-decoration: inherit;
-}
-a:hover {
-  color: var(--zenith-red-hover);
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  color: var(--text-dark);
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: var(--zenith-red);
-  color: var(--zenith-white);
-  cursor: pointer;
-  transition: all 0.25s;
-}
-button:hover {
-  background-color: var(--zenith-red-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(227, 0, 15, 0.3);
-}
-button:focus,
-button:focus-visible {
-  outline: 2px solid var(--zenith-red);
-  outline-offset: 2px;
 }
