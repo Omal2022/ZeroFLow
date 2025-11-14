@@ -83,12 +83,12 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
     setMovements(prev => ({ ...prev, faceVisible: true }));
     setStatus("✅ Face detected! Verifying liveness...");
 
-    // Auto-complete movements with realistic timing - MUCH FASTER for demo!
+    // Auto-complete movements INSTANTLY for super easy demo! (~1.5 seconds total)
     const checks = [
-      { key: "blink", delay: 2000, message: "✅ Blink detected! Checking head movement..." },
-      { key: "moveLeft", delay: 3500, message: "✅ Left turn detected! Continuing..." },
-      { key: "moveRight", delay: 5000, message: "✅ Right turn detected! Almost done..." },
-      { key: "nod", delay: 6500, message: "🎉 Perfect! All checks complete." },
+      { key: "blink", delay: 300, message: "✅ Blink detected! Checking head movement..." },
+      { key: "moveLeft", delay: 600, message: "✅ Left turn detected! Continuing..." },
+      { key: "moveRight", delay: 900, message: "✅ Right turn detected! Almost done..." },
+      { key: "nod", delay: 1200, message: "🎉 Perfect! All checks complete." },
     ];
 
     checks.forEach(({ key, delay, message }) => {
@@ -501,13 +501,13 @@ export default function Verification({ user = { id: "1", name: "Test User" }, on
           }}
         >
           <strong style={{ display: "block", marginBottom: "0.5rem" }}>
-            💡 Demo Mode:
+            💡 Super Easy Demo Mode:
           </strong>
           <ul style={{ margin: 0, paddingLeft: "1.25rem" }}>
-            <li>Just stay in frame - checks complete automatically in ~7 seconds</li>
-            <li>Or click "Skip Checks" to go directly to photo capture</li>
-            <li>Verification is simplified for easy demo</li>
-            <li>Perfect for presentations and testing!</li>
+            <li>✨ Checks complete automatically in ~1.5 seconds!</li>
+            <li>⚡ Or click "Skip Checks" to go instantly to photo capture</li>
+            <li>🎯 Verification is ultra-simplified for easy demo</li>
+            <li>🚀 Perfect for quick testing and presentations!</li>
           </ul>
         </div>
       )}

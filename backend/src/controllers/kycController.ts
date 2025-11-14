@@ -13,9 +13,33 @@ interface AccountRecord {
 
 const accountsStore: Map<string, AccountRecord> = new Map();
 
-// Check if account already exists
+// Check if account already exists by identity number
 export function checkExistingAccount(identityNumber: string): AccountRecord | null {
   return accountsStore.get(identityNumber) || null;
+}
+
+// Check if account exists by email
+export function checkExistingAccountByEmail(email: string): AccountRecord | null {
+  for (const [_, account] of accountsStore) {
+    if (account.email.toLowerCase() === email.toLowerCase()) {
+      return account;
+    }
+  }
+  return null;
+}
+
+// Check if account exists by phone
+export function checkExistingAccountByPhone(phone: string): AccountRecord | null {
+  // Normalize phone number (remove spaces, dashes, etc.)
+  const normalizedPhone = phone.replace(/[\s-()]/g, '');
+
+  for (const [_, account] of accountsStore) {
+    const accountPhone = account.phone.replace(/[\s-()]/g, '');
+    if (accountPhone === normalizedPhone) {
+      return account;
+    }
+  }
+  return null;
 }
 
 // Store new account
@@ -300,11 +324,44 @@ export const createAccount = (req: express.Request, res: express.Response): void
     res.status(409).json({
       success: false,
       message: `An account already exists with this ${identityType}. You cannot create multiple accounts with the same identity.`,
+      duplicateType: "identity_number",
       existingAccountInfo: {
         accountNumber: existingAccount.accountNumber,
         email: existingAccount.email,
         phone: existingAccount.phone,
         createdAt: existingAccount.createdAt
+      }
+    });
+    return;
+  }
+
+  // Check for existing account with this email
+  const existingAccountByEmail = checkExistingAccountByEmail(email);
+  if (existingAccountByEmail) {
+    res.status(409).json({
+      success: false,
+      message: `An account already exists with this email address (${email}). Each person can only have one account.`,
+      duplicateType: "email",
+      existingAccountInfo: {
+        accountNumber: existingAccountByEmail.accountNumber,
+        email: existingAccountByEmail.email,
+        createdAt: existingAccountByEmail.createdAt
+      }
+    });
+    return;
+  }
+
+  // Check for existing account with this phone number
+  const existingAccountByPhone = checkExistingAccountByPhone(phone);
+  if (existingAccountByPhone) {
+    res.status(409).json({
+      success: false,
+      message: `An account already exists with this phone number (${phone}). Each person can only have one account.`,
+      duplicateType: "phone",
+      existingAccountInfo: {
+        accountNumber: existingAccountByPhone.accountNumber,
+        phone: existingAccountByPhone.phone,
+        createdAt: existingAccountByPhone.createdAt
       }
     });
     return;
@@ -361,11 +418,18 @@ export const createAccount = (req: express.Request, res: express.Response): void
 
   console.log(`
 ╔════════════════════════════════════════════╗
-║         NEW ACCOUNT CREATED                ║
+║       ✅ NEW ACCOUNT CREATED               ║
+╠════════════════════════════════════════════╣
 ║ Account Number: ${accountNumber}           ║
 ║ Identity: ${identityType} - ***${identityNumber.slice(-4)}        ║
 ║ Email: ${email.padEnd(30)}║
+║ Phone: ${phone.padEnd(30)}║
 ║ Status: ${accountStatus.padEnd(33)}║
+║ KYC Tier: Tier ${kycTier} (${tierInfo?.description})        ║
+║ Trust Score: ${(trustScore * 100).toFixed(0)}%                            ║
+╠════════════════════════════════════════════╣
+║ 🛡️  Duplicate Prevention: Active          ║
+║ Total Accounts: ${accountsStore.size.toString().padEnd(27)}║
 ╚════════════════════════════════════════════╝
   `);
 
