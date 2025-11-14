@@ -26,9 +26,6 @@ export default function AutoFillForm() {
     nationality: "Nigerian"
   });
 
-  const [useCurrentLocation, setUseCurrentLocation] = useState(false);
-  const [gpsData, setGpsData] = useState<{ latitude: number; longitude: number } | null>(null);
-
   useEffect(() => {
     if (!state?.verificationData) {
       navigate("/identity");
@@ -74,58 +71,17 @@ export default function AutoFillForm() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleGetLocation = () => {
-    setUseCurrentLocation(true);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setGpsData({ latitude, longitude });
-
-          // Reverse geocode (mock)
-          setFormData(prev => ({
-            ...prev,
-            address: `GPS: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
-          }));
-        },
-        (error) => {
-          console.error("GPS error:", error);
-          alert("Unable to get location. Please enter manually.");
-          setUseCurrentLocation(false);
-        }
-      );
-    }
-  };
-
-  const handleContinue = async () => {
+  const handleContinue = () => {
     // Validate required fields
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.dob) {
       alert("Please fill in all required fields");
       return;
     }
 
-    // Verify GPS if enabled
-    if (gpsData) {
-      try {
-        await fetch("http://localhost:5000/kyc/verify/location", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            latitude: gpsData.latitude,
-            longitude: gpsData.longitude,
-            address: formData.address
-          })
-        });
-      } catch (error) {
-        console.error("GPS verification failed:", error);
-      }
-    }
-
     navigate("/face-verification", {
       state: {
         ...state,
-        formData,
-        gpsData
+        formData
       }
     });
   };
@@ -305,25 +261,6 @@ export default function AutoFillForm() {
                 </svg>
                 Address Information
               </h3>
-
-              {/* GPS Location Button */}
-              <div className="mb-4">
-                <button
-                  type="button"
-                  onClick={handleGetLocation}
-                  disabled={useCurrentLocation}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    useCurrentLocation
-                      ? "bg-green-500/20 text-green-300 border border-green-500/30"
-                      : "bg-blue-500/20 text-blue-300 border border-blue-500/30 hover:bg-blue-500/30"
-                  }`}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  </svg>
-                  {useCurrentLocation ? "✓ Location Captured" : "Use Current Location"}
-                </button>
-              </div>
 
               <div className="grid grid-cols-1 gap-4">
                 <div>
