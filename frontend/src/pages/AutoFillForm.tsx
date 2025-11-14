@@ -66,6 +66,15 @@ export default function AutoFillForm() {
     }
   }, [state, navigate]);
 
+  // Show loading if no verification data (prevents blank page before redirect)
+  if (!state?.verificationData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
