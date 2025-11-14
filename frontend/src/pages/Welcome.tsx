@@ -28,16 +28,16 @@ export default function Welcome() {
   }, []);
 
   const handleGetStarted = () => {
-    navigate("/identity");
+    navigate("/verify-contact");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-40 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob" style={{ backgroundColor: '#ac0509' }}></div>
+        <div className="absolute top-40 right-20 w-72 h-72 bg-red-900 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-40 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-4000" style={{ backgroundColor: '#ac0509' }}></div>
       </div>
 
       {/* Main content */}
@@ -45,24 +45,24 @@ export default function Welcome() {
         {/* Logo/Icon */}
         <div className="mb-8 flex justify-center">
           <div className="relative">
-            <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300">
+            <div className="w-24 h-24 rounded-2xl flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300" style={{ background: 'linear-gradient(135deg, #ac0509 0%, #7a0306 100%)' }}>
               <svg className="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-slate-900 animate-pulse"></div>
+            <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full border-4 border-black animate-pulse" style={{ backgroundColor: '#ac0509' }}></div>
           </div>
         </div>
 
         {/* Typed heading */}
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 min-h-[80px] md:min-h-[100px]">
           {displayedText}
-          <span className="inline-block w-1 h-12 md:h-16 bg-purple-500 ml-1 animate-pulse"></span>
+          <span className="inline-block w-1 h-12 md:h-16 ml-1 animate-pulse" style={{ backgroundColor: '#ac0509' }}></span>
         </h1>
 
         {/* Subheading with fade-in */}
         <div className={`transition-all duration-1000 delay-500 ${showButton ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-          <p className="text-2xl md:text-3xl text-purple-300 mb-4 font-semibold">
+          <p className="text-2xl md:text-3xl mb-4 font-semibold" style={{ color: '#ac0509' }}>
             {subMessage}
           </p>
           <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
@@ -72,19 +72,19 @@ export default function Welcome() {
           {/* Feature badges */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
             <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2 hover:bg-white/20 transition-all">
-              <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5" style={{ color: '#ac0509' }} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span className="text-white font-medium">AI-Powered</span>
             </div>
             <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2 hover:bg-white/20 transition-all">
-              <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5" style={{ color: '#ac0509' }} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
               </svg>
               <span className="text-white font-medium">Bank-Grade Security</span>
             </div>
             <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2 hover:bg-white/20 transition-all">
-              <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5" style={{ color: '#ac0509' }} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
               </svg>
               <span className="text-white font-medium">&lt;60s Setup</span>
@@ -94,7 +94,8 @@ export default function Welcome() {
           {/* CTA Button */}
           <button
             onClick={handleGetStarted}
-            className="group relative px-12 py-5 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xl font-semibold rounded-full shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            className="group relative px-12 py-5 text-white text-xl font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden"
+            style={{ backgroundColor: '#ac0509', boxShadow: '0 20px 60px rgba(172, 5, 9, 0.5)' }}
           >
             <span className="relative z-10 flex items-center gap-3">
               Get Started Now
@@ -102,7 +103,7 @@ export default function Welcome() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(to right, #7a0306, #ac0509)' }}></div>
           </button>
 
           {/* Trust indicators */}
