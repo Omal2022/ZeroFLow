@@ -12,7 +12,7 @@ import CreateAcc from "./pages/CreateAcc.tsx";
 import Verification from "./pages/Verification.tsx";
 import { useNavigate } from "react-router-dom";
 
-// Token Verification Wrapper to handle navigation
+// Token Verification Wrapper to handle navigation (after form)
 function TokenVerificationPage() {
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ function TokenVerificationPage() {
         // Store verification info in sessionStorage
         sessionStorage.setItem('verifiedContact', contact);
         sessionStorage.setItem('verificationType', type);
-        navigate('/identity');
+        navigate('/face-verification');
       }}
     />
   );
@@ -35,10 +35,10 @@ const App = () => {
         <Routes>
           {/* New KYC Flow */}
           <Route path="/" element={<Welcome />} />
-          <Route path="/verify-contact" element={<TokenVerificationPage />} />
           <Route path="/identity" element={<IdentityInput />} />
           <Route path="/loading" element={<LoadingVerification />} />
           <Route path="/form" element={<AutoFillForm />} />
+          <Route path="/verify-contact" element={<TokenVerificationPage />} />
           <Route path="/face-verification" element={<FaceVerificationWrapper />} />
           <Route path="/success" element={<AccountSuccess />} />
           <Route path="/dashboard" element={<Dashboard />} />

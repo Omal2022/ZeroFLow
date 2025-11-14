@@ -268,7 +268,7 @@ export default function TokenVerification({ onVerified }: TokenVerificationProps
           </>
         ) : (
           <>
-            {/* Demo Token Display */}
+            {/* Info Message - Check Backend Terminal */}
             <div style={{
               backgroundColor: bgDark,
               borderRadius: '12px',
@@ -277,17 +277,11 @@ export default function TokenVerification({ onVerified }: TokenVerificationProps
               textAlign: 'center',
               border: `2px solid ${primaryColor}`,
             }}>
-              <p style={{ color: textColor, opacity: 0.8, margin: '0 0 10px 0', fontSize: '14px' }}>
-                Demo Token (Check console for full details)
+              <p style={{ color: textColor, fontSize: '16px', margin: '0 0 10px 0', fontWeight: '600' }}>
+                📬 Verification Code Sent!
               </p>
-              <p style={{
-                color: primaryColor,
-                fontSize: '32px',
-                fontWeight: 'bold',
-                margin: 0,
-                letterSpacing: '8px',
-              }}>
-                {demoToken}
+              <p style={{ color: textColor, opacity: 0.8, margin: '0 0 10px 0', fontSize: '14px' }}>
+                Check your backend terminal/console for the 6-digit code
               </p>
               <p style={{ color: textColor, opacity: 0.6, margin: '10px 0 0 0', fontSize: '12px' }}>
                 ⏱️ Expires in: {formatTime(timeLeft)}
@@ -400,7 +394,7 @@ export default function TokenVerification({ onVerified }: TokenVerificationProps
           color: textColor,
           opacity: 0.8,
         }}>
-          <strong>💡 Note:</strong> This is a demo. In production, the code would be sent via {verificationType === 'email' ? 'email' : 'SMS'}. Check your browser console to see the token.
+          <strong>💡 Note:</strong> This is a demo. In production, the code would be sent via {verificationType === 'email' ? 'email' : 'SMS'}. Check your backend server terminal/console for the verification code.
         </div>
       </div>
     </div>

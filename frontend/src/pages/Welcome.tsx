@@ -28,7 +28,7 @@ export default function Welcome() {
   }, []);
 
   const handleGetStarted = () => {
-    navigate("/verify-contact");
+    navigate("/identity");
   };
 
   return (

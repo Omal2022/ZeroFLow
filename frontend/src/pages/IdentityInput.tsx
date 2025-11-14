@@ -52,11 +52,11 @@ export default function IdentityInput() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
       {/* Background effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-20 left-20 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob" style={{ backgroundColor: '#ac0509' }}></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-red-900 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-2xl">
@@ -77,10 +77,10 @@ export default function IdentityInput() {
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-300">Step 1 of 5</span>
-              <span className="text-sm text-purple-300">20% Complete</span>
+              <span className="text-sm" style={{ color: '#ac0509' }}>20% Complete</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-2">
-              <div className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500" style={{ width: "20%" }}></div>
+              <div className="h-2 rounded-full transition-all duration-500" style={{ width: "20%", backgroundColor: '#ac0509' }}></div>
             </div>
           </div>
 
@@ -100,14 +100,16 @@ export default function IdentityInput() {
               onClick={() => handleIdentityTypeChange("NIN")}
               className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
                 identityType === "NIN"
-                  ? "border-purple-500 bg-purple-500/20 shadow-lg shadow-purple-500/50"
+                  ? "bg-white/5 hover:bg-white/10"
                   : "border-white/20 bg-white/5 hover:bg-white/10"
               }`}
+              style={identityType === "NIN" ? { borderColor: '#ac0509', boxShadow: '0 10px 30px rgba(172, 5, 9, 0.5)' } : {}}
             >
               <div className="flex flex-col items-center gap-3">
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                  identityType === "NIN" ? "bg-purple-500" : "bg-gray-600"
-                }`}>
+                  identityType === "NIN" ? "" : "bg-gray-600"
+                }`}
+                  style={identityType === "NIN" ? { backgroundColor: '#ac0509' } : {}}>
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                   </svg>
@@ -117,7 +119,7 @@ export default function IdentityInput() {
                   <p className="text-gray-400 text-sm">National ID</p>
                 </div>
                 {identityType === "NIN" && (
-                  <div className="flex items-center gap-1 text-purple-400 text-sm">
+                  <div className="flex items-center gap-1 text-sm" style={{ color: '#ac0509' }}>
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -131,14 +133,16 @@ export default function IdentityInput() {
               onClick={() => handleIdentityTypeChange("BVN")}
               className={`p-6 rounded-2xl border-2 transition-all duration-300 ${
                 identityType === "BVN"
-                  ? "border-blue-500 bg-blue-500/20 shadow-lg shadow-blue-500/50"
+                  ? "bg-white/5 hover:bg-white/10"
                   : "border-white/20 bg-white/5 hover:bg-white/10"
               }`}
+              style={identityType === "BVN" ? { borderColor: '#ac0509', boxShadow: '0 10px 30px rgba(172, 5, 9, 0.5)' } : {}}
             >
               <div className="flex flex-col items-center gap-3">
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                  identityType === "BVN" ? "bg-blue-500" : "bg-gray-600"
-                }`}>
+                  identityType === "BVN" ? "" : "bg-gray-600"
+                }`}
+                  style={identityType === "BVN" ? { backgroundColor: '#ac0509' } : {}}>
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                   </svg>
@@ -148,7 +152,7 @@ export default function IdentityInput() {
                   <p className="text-gray-400 text-sm">Bank Verification</p>
                 </div>
                 {identityType === "BVN" && (
-                  <div className="flex items-center gap-1 text-blue-400 text-sm">
+                  <div className="flex items-center gap-1 text-sm" style={{ color: '#ac0509' }}>
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -172,7 +176,10 @@ export default function IdentityInput() {
                 onKeyPress={handleKeyPress}
                 placeholder="Enter 11 digits"
                 maxLength={11}
-                className="w-full px-6 py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white text-xl tracking-widest placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:bg-white/15 transition-all"
+                className="w-full px-6 py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white text-xl tracking-widest placeholder-gray-500 focus:outline-none focus:bg-white/15 transition-all"
+                style={{ outlineColor: '#ac0509' }}
+                onFocus={(e) => e.target.style.borderColor = '#ac0509'}
+                onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)'}
               />
               {identityNumber.length === 11 && (
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -198,13 +205,13 @@ export default function IdentityInput() {
           </div>
 
           {/* Info box */}
-          <div className="mb-8 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+          <div className="mb-8 p-4 rounded-xl" style={{ backgroundColor: 'rgba(172, 5, 9, 0.1)', border: '1px solid rgba(172, 5, 9, 0.3)' }}>
             <div className="flex gap-3">
-              <svg className="w-6 h-6 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-6 h-6 flex-shrink-0" style={{ color: '#ac0509' }} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <div className="text-sm text-gray-300">
-                <p className="font-medium text-blue-300 mb-1">Secure & Private</p>
+                <p className="font-medium mb-1" style={{ color: '#ac0509' }}>Secure & Private</p>
                 <p>Your {identityType} is encrypted and will only be used for identity verification. We comply with NDPR regulations.</p>
               </div>
             </div>
@@ -216,9 +223,10 @@ export default function IdentityInput() {
             disabled={identityNumber.length !== 11 || isValidating}
             className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
               identityNumber.length === 11 && !isValidating
-                ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:shadow-lg hover:shadow-purple-500/50 hover:scale-[1.02]"
+                ? "text-white"
                 : "bg-gray-600 text-gray-400 cursor-not-allowed"
             }`}
+            style={identityNumber.length === 11 && !isValidating ? { backgroundColor: '#ac0509', boxShadow: '0 10px 30px rgba(172, 5, 9, 0.5)' } : {}}
           >
             {isValidating ? (
               <span className="flex items-center justify-center gap-2">
@@ -244,7 +252,8 @@ export default function IdentityInput() {
           Don't have a {identityType}?{" "}
           <button
             onClick={() => handleIdentityTypeChange(identityType === "NIN" ? "BVN" : "NIN")}
-            className="text-purple-400 hover:text-purple-300 underline"
+            className="underline"
+            style={{ color: '#ac0509' }}
           >
             Try {identityType === "NIN" ? "BVN" : "NIN"} instead
           </button>
