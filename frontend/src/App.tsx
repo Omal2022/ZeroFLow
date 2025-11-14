@@ -9,6 +9,8 @@ import Dashboard from "./pages/Dashboard.tsx";
 import Settings from "./pages/Settings.tsx";
 import CreateAcc from "./pages/CreateAcc.tsx";
 import Verification from "./pages/Verification.tsx";
+import VerificationSelection from './components/VerificationSelection';
+import './App.css';
 
 const App = () => {
   return (
@@ -24,6 +26,9 @@ const App = () => {
           <Route path="/success" element={<AccountSuccess />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
+
+          {/* Verification Selection Route */}
+          <Route path="/verification-select" element={<VerificationSelection />} />
 
           {/* Legacy Routes */}
           <Route path="/old" element={<CreateAcc />} />
