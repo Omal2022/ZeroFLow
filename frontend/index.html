@@ -6,105 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZeroFlow - Digital Banking</title>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Custom Tailwind Configuration -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            animation: {
-              'blob': 'blob 7s infinite',
-              'scale-in': 'scaleIn 0.5s ease-out',
-              'fade-in-up': 'fadeInUp 0.6s ease-out',
-              'check-draw': 'checkDraw 0.5s ease-out 0.3s forwards',
-              'gradient-x': 'gradient-x 3s ease infinite',
-              'spin-reverse': 'spin-reverse 1s linear infinite',
-              'confetti': 'confetti 3s ease-out forwards',
-            },
-            keyframes: {
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
-              scaleIn: {
-                '0%': { transform: 'scale(0)', opacity: '0' },
-                '100%': { transform: 'scale(1)', opacity: '1' },
-              },
-              fadeInUp: {
-                '0%': { transform: 'translateY(20px)', opacity: '0' },
-                '100%': { transform: 'translateY(0)', opacity: '1' },
-              },
-              checkDraw: {
-                '0%': { strokeDasharray: '0 100' },
-                '100%': { strokeDasharray: '100 0' },
-              },
-              'gradient-x': {
-                '0%, 100%': { 'background-position': '0% 50%' },
-                '50%': { 'background-position': '100% 50%' },
-              },
-              'spin-reverse': {
-                '0%': { transform: 'rotate(0deg)' },
-                '100%': { transform: 'rotate(-360deg)' },
-              },
-              confetti: {
-                '0%': { transform: 'translateY(0) rotateZ(0deg)', opacity: '1' },
-                '100%': { transform: 'translateY(100vh) rotateZ(720deg)', opacity: '0' },
-              },
-            },
-          },
-        },
-      }
-    </script>
-
     <!-- Custom Styles -->
     <style>
-      @keyframes blob {
-        0% { transform: translate(0px, 0px) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-        100% { transform: translate(0px, 0px) scale(1); }
-      }
-
-      @keyframes scaleIn {
-        0% { transform: scale(0); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-      }
-
-      @keyframes fadeInUp {
-        0% { transform: translateY(20px); opacity: 0; }
-        100% { transform: translateY(0); opacity: 1; }
-      }
-
-      @keyframes checkDraw {
-        0% { stroke-dasharray: 0 100; }
-        100% { stroke-dasharray: 100 0; }
-      }
-
-      @keyframes gradient-x {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-      }
-
-      @keyframes spin-reverse {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(-360deg); }
-      }
-
-      @keyframes confetti {
-        0% { transform: translateY(0) rotateZ(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; }
-      }
-
+      /* Animation delay utilities */
       .animation-delay-200 { animation-delay: 200ms; }
       .animation-delay-400 { animation-delay: 400ms; }
       .animation-delay-600 { animation-delay: 600ms; }
       .animation-delay-2000 { animation-delay: 2s; }
       .animation-delay-4000 { animation-delay: 4s; }
 
+      /* Grid pattern background */
       .bg-grid-pattern {
         background-image:
           linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -132,6 +43,7 @@
         background: rgba(139, 92, 246, 0.8);
       }
 
+      /* Base body styles */
       body {
         margin: 0;
         padding: 0;
