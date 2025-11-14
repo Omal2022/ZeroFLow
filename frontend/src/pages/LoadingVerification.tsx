@@ -52,6 +52,11 @@ export default function LoadingVerification() {
   }, [state, navigate]);
 
   useEffect(() => {
+    // Don't start animation until we have verification data
+    if (!verificationData) {
+      return;
+    }
+
     // Animate through steps
     let currentStepIndex = 0;
     let totalProgress = 0;
