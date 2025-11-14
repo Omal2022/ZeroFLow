@@ -310,14 +310,24 @@ export const createAccount = (req: express.Request, res: express.Response): void
     return;
   }
 
-  // Verify identity first
+  // Verify identity first and retrieve DOB from database
   let verified = false;
+  let databaseDOB = dob; // Default to user-provided DOB as fallback
+
   if (identityType === "NIN") {
     const ninRecord = findNINRecord(identityNumber);
     verified = ninRecord !== null && ninRecord.status === "active";
+    // Use DOB from NIN database for account number generation
+    if (ninRecord?.demographics?.dob) {
+      databaseDOB = ninRecord.demographics.dob;
+    }
   } else if (identityType === "BVN") {
     const bvnRecord = findBVNRecord(identityNumber);
     verified = bvnRecord !== null;
+    // Use DOB from BVN database for account number generation
+    if (bvnRecord?.dob) {
+      databaseDOB = bvnRecord.dob;
+    }
   }
 
   if (!verified) {
@@ -328,8 +338,8 @@ export const createAccount = (req: express.Request, res: express.Response): void
     return;
   }
 
-  // Generate account number with new formula: 42 + last 4 NIN + YYMMDD
-  const accountNumber = generateAccountNumber(dob, identityNumber);
+  // Generate account number with new formula: 42 + last 4 NIN + YYMMDD (using database DOB)
+  const accountNumber = generateAccountNumber(databaseDOB, identityNumber);
 
   // Calculate trust score
   const trustScore = calculateTrustScore({
